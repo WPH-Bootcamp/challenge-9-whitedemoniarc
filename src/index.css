@@ -1,1 +1,39 @@
 @import "tailwindcss";
+
+@theme {
+  --color-background: #0a0a0a;
+  --color-foreground: #fafafa;
+  --color-card: #171717;
+  --color-muted: #525252;
+  --color-accent: #e11d48; /* Rose/Red untuk accent seperti di Figma */
+}
+
+/* Smooth scroll & dark theme base */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #0a0a0a;
+  color: #fafafa;
+}
+
+/* Custom scrollbar for horizontal scroll */
+.horizontal-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #525252 #171717;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb {
+  background-color: #525252;
+  border-radius: 20px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-track {
+  background: #171717;
+}
