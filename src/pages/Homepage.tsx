@@ -10,8 +10,6 @@ import Footer from '@/components/Footer';
 
 export default function HomePage() {
   const { data, isLoading, error } = usePopularMovies();
- 
-
   
   const [search, setSearch] = useState('');
 
@@ -23,15 +21,33 @@ export default function HomePage() {
   movie.title.toLowerCase().includes(search.toLowerCase())
 );
 
-useEffect(() => {
+
+
+const nextHero = () => {
   if (!data?.length) return;
 
+  setCurrentHero((prev) => (prev === data.length - 1 ? 0 : prev + 1));
+};
+
+const prevHero = () => {
+  if (!data?.length) return;
+
+  setCurrentHero((prev) => (prev === 0 ? data.length - 1 : prev - 1));
+};
+
+const [showTrailer, setShowTrailer] = useState(false);
+
+
+
+useEffect(() => {
+  if (!data?.length || showTrailer) return;
+
   const interval = setInterval(() => {
-    setCurrentHero((prev) => (prev === data.length - 1 ? 0 : prev + 1));
+    setCurrentHero((prev) => (prev + 1) % 5);
   }, 5000);
 
   return () => clearInterval(interval);
-}, [data]);
+}, [data, showTrailer]);
 
   if (isLoading) {
     return <h1>Loading...</h1>;
@@ -45,9 +61,85 @@ useEffect(() => {
     <main className="min-h-screen bg-black text-white ">
       <Navbar search={search} setSearch={setSearch} />
 
-      {heroMovie && <Hero movie={heroMovie} />}
+      <div className="relative">
+        {heroMovie && (
+          <Hero movie={heroMovie} showTrailer={showTrailer} setShowTrailer={setShowTrailer} />
+        )}
+        {/* LEFT */}
+        <button
+          onClick={prevHero}
+          className="
+          opacity-70 hover:opacity-100 transition
+      absolute
+      left-6
+      top-1/2
+      -translate-y-1/2
+
+      w-14
+      h-14
+
+      rounded-full
+
+      bg-black/40
+      backdrop-blur-md
+
+      border
+      border-white/20
+
+      hover:bg-black/60
+
+      transition
+
+      flex
+      items-center
+      justify-center
+
+      text-2xl
+      z-20
+    "
+        >
+          ←
+        </button>
+
+        {/* RIGHT */}
+        <button
+          onClick={nextHero}
+          className="
+    opacity-70 hover:opacity-100 transition
+      absolute
+      right-6
+      top-1/2
+      -translate-y-1/2
+
+      w-14
+      h-14
+
+      rounded-full
+
+      bg-black/40
+      backdrop-blur-md
+
+      border
+      border-white/20
+
+      hover:bg-black/60
+
+      transition
+
+      flex
+      items-center
+      justify-center
+
+      text-2xl
+      z-20
+    "
+        >
+          →
+        </button>
+      </div>
+
       <div className="flex justify-center gap-2 mb-10 pt-24">
-        {data?.slice(0, 5).map((_, index) => (
+        {data?.slice(0, 5).map((_: Movie, index: number) => (
           <button
             key={index}
             onClick={() => setCurrentHero(index)}

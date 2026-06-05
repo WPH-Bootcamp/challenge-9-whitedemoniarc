@@ -1,28 +1,27 @@
 import type { Movie } from '../types/movie';
 import { useMovieVideos } from '@/hooks/useMovieVideos';
-import { useState } from 'react';
+
 
 import { useNavigate } from 'react-router-dom';
 
 type HeroProps = {
   movie: Movie;
+  showTrailer: boolean;
+  setShowTrailer: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 
 
-export default function Hero({ movie }: HeroProps) {
+export default function Hero({ movie, showTrailer, setShowTrailer }: HeroProps) {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
-    const [showTrailer, setShowTrailer] = useState(false);
-const { data: videos } = useMovieVideos(movie.id);
+  const { data: videos } = useMovieVideos(movie.id);
 
-    const trailer = videos?.results?.find(
-      (video: { site: string; type: string; key: string }) =>
-        video.site === 'YouTube' && video.type === 'Trailer'
-    );
+  const trailer = videos?.results?.find(
+    (video: { site: string; type: string; key: string }) =>
+      video.site === 'YouTube' && video.type === 'Trailer'
+  );
 
-
-    
   return (
     <section
       key={movie.id}
