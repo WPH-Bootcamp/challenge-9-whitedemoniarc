@@ -37,3 +37,19 @@ body {
 .horizontal-scroll::-webkit-scrollbar-track {
   background: #171717;
 }
+
+@keyframes heroSlide {
+  from {
+    opacity: 0;
+    transform: translateX(80px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.hero-slide {
+  animation: heroSlide 0.8s ease-out;
+}

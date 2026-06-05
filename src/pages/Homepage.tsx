@@ -4,7 +4,7 @@ import MovieCard from '@/components/MovieCard';
 
 import { usePopularMovies } from '@/hooks/usePopularMovies';
 import type { Movie } from '@/types/movie';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Footer from '@/components/Footer';
 
@@ -12,13 +12,26 @@ export default function HomePage() {
   const { data, isLoading, error } = usePopularMovies();
  
 
+  
   const [search, setSearch] = useState('');
 
-   const heroMovie = data?.[0];
+  const [currentHero, setCurrentHero] = useState(0);
+
+   const heroMovie = data?.[currentHero];
 
    const filteredMovies = data?.filter((movie: Movie) =>
   movie.title.toLowerCase().includes(search.toLowerCase())
 );
+
+useEffect(() => {
+  if (!data?.length) return;
+
+  const interval = setInterval(() => {
+    setCurrentHero((prev) => (prev === data.length - 1 ? 0 : prev + 1));
+  }, 5000);
+
+  return () => clearInterval(interval);
+}, [data]);
 
   if (isLoading) {
     return <h1>Loading...</h1>;
@@ -29,10 +42,25 @@ export default function HomePage() {
   }
 
   return (
-    <main className="min-h-screen bg-black text-white pt-28">
+    <main className="min-h-screen bg-black text-white ">
       <Navbar search={search} setSearch={setSearch} />
 
       {heroMovie && <Hero movie={heroMovie} />}
+      <div className="flex justify-center gap-2 mb-10 pt-24">
+        {data?.slice(0, 5).map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentHero(index)}
+            className={`
+        w-3
+        h-3
+        rounded-full
+        transition-all
+        ${currentHero === index ? 'bg-red-500' : 'bg-white/30'}
+      `}
+          />
+        ))}
+      </div>
       <h1 className="text-4xl font-bold mb-8">Trending Now</h1>
 
       <div

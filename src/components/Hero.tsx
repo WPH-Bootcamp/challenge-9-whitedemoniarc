@@ -25,7 +25,8 @@ const { data: videos } = useMovieVideos(movie.id);
     
   return (
     <section
-      className="relative h-[80vh] bg-cover bg-center"
+      key={movie.id}
+      className="hero-slide relative h-[80vh] bg-cover bg-center"
       style={{
         backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`,
       }}
